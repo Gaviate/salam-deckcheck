@@ -1,0 +1,18 @@
+// Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
+package report
+include summary "summary.salam"
+
+pub func Print(counts: summary.Counts, physical_lines: int):
+    println "Cards: ", counts.rows
+    println "Ignored lines: ", physical_lines - counts.rows
+    println "Complete cards: ", counts.valid
+    println "Malformed rows: ", counts.malformed
+    println "Blank questions: ", counts.blank_questions
+    println "Blank answers: ", counts.blank_answers
+    println "Errors: ", counts.errors
+    if summary.Passed(counts):
+        println "Result: PASS"
+    else:
+        println "Result: FAIL"
+    end
+end

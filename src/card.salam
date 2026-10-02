@@ -1,0 +1,14 @@
+// Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
+package card
+
+pub struct Card:
+    pub line: int = 0
+    pub columns: int = 0
+    pub question: str = ""
+    pub answer: str = ""
+    pub topic: str = ""
+end
+
+pub func Complete(item: Card): bool:
+    ret item.columns == 3 and item.question.len() > 0 and item.answer.len() > 0
+end

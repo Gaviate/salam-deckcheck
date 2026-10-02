@@ -1,0 +1,15 @@
+// Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
+package summary
+
+pub struct Counts:
+    pub rows: int = 0
+    pub valid: int = 0
+    pub malformed: int = 0
+    pub blank_questions: int = 0
+    pub blank_answers: int = 0
+    pub errors: int = 0
+end
+
+pub func Passed(counts: Counts): bool:
+    ret counts.rows > 0 and counts.errors == 0
+end

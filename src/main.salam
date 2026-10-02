@@ -2,6 +2,10 @@
 import os
 include cli "cli.salam"
 include loader "loader.salam"
+include parser "parser.salam"
+include validator "validator.salam"
+include report "report.salam"
+include summary "summary.salam"
 
 func main:
     mut argv := os.Args()
@@ -26,6 +30,10 @@ func main:
     mut lines := loader.Lines(path)
     defer lines.free()
     println "Deck: ", path
-    println "Physical lines: ", lines.len()
-    ret 0
+    mut cards := parser.Parse(lines)
+    defer cards.free()
+    counts := validator.Check(cards)
+    report.Print(counts, lines.len())
+    if summary.Passed(counts): ret 0 end
+    ret 1
 end

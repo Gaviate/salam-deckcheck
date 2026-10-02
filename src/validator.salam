@@ -1,0 +1,33 @@
+// Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
+package validator
+include card "card.salam"
+include summary "summary.salam"
+
+pub func Check(cards: Vector<card.Card>): summary.Counts:
+    mut counts := summary.Counts { rows = cards.len() }
+    repeat cards.len() in i:
+        item := cards.get(i)
+        if item.columns != 3:
+            println "ERROR line ", item.line, ": expected 3 tab-separated fields; found ", item.columns
+            counts.malformed += 1
+            counts.errors += 1
+        else:
+            if item.question.len() == 0:
+                println "ERROR line ", item.line, ": blank question"
+                counts.blank_questions += 1
+                counts.errors += 1
+            end
+            if item.answer.len() == 0:
+                println "ERROR line ", item.line, ": blank answer"
+                counts.blank_answers += 1
+                counts.errors += 1
+            end
+            if card.Complete(item): counts.valid += 1 end
+        end
+    end
+    if counts.rows == 0:
+        println "ERROR: deck contains no cards"
+        counts.errors += 1
+    end
+    ret counts
+end

@@ -1,0 +1,6 @@
+# Deliberately invalid synthetic cards
+Missing answer		Basics
+	Has an answer	Basics
+Too few	Only two
+Too many	Answer	Basics	Extra
+Good question	Good answer	Basics

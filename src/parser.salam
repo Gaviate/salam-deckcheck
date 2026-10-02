@@ -1,0 +1,28 @@
+// Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
+package parser
+include card "card.salam"
+
+pub func Ignored(line: str): bool:
+    trimmed := line.trim()
+    if trimmed.len() == 0: ret true end
+    ret trimmed.substr(0, 1) == "#"
+end
+
+pub func Parse(lines: Vector<str>): Vector<card.Card>:
+    mut cards := Vector {} as Vector<card.Card>
+    repeat lines.len() in i:
+        raw := lines.get(i)
+        if not Ignored(raw):
+            mut fields := raw.split("\t")
+            defer fields.free()
+            mut item := card.Card { line = i + 1, columns = fields.len() }
+            if fields.len() == 3:
+                item.question = fields.get(0).trim()
+                item.answer = fields.get(1).trim()
+                item.topic = fields.get(2).trim()
+            end
+            cards.push(item)
+        end
+    end
+    ret cards
+end

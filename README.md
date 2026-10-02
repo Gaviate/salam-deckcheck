@@ -5,8 +5,9 @@ Salam. It is intended to catch editing mistakes before a TSV deck is imported
 into a study app.
 
 The input format is one card per line: `question<TAB>answer<TAB>topic`.
-DeckCheck now loads local deck files and reports their physical line count.
-Validation is being developed incrementally in this repository.
+DeckCheck detects malformed rows and blank questions or answers, keeping the
+original physical line numbers in its diagnostics. Blank lines and `#` comments
+are ignored. A deck with no cards fails validation.
 
 ## Build
 
@@ -20,3 +21,6 @@ salam build src/main.salam --output=build/deckcheck.exe
 
 DeckCheck source is copyright 2026 Jaye, licensed under GPL-3.0-only.
 It imports the GPL-3.0 Salam standard library. See [LICENSE](LICENSE).
+
+Exit codes: `0` for a passing deck/help, `1` for validation errors, `2` for
+incorrect usage or an unreadable path. All fixtures contain synthetic content.
