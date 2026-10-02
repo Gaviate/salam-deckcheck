@@ -13,6 +13,11 @@ Complete cards with repeated questions are errors. Questions are trimmed and
 lowercased for comparison; the diagnostic points back to the first occurrence.
 Answers and topics do not affect duplicate detection.
 
+Topic counts include unique complete cards only. Labels are trimmed and grouped
+without case distinctions, keeping the first spelling and first-appearance
+order. An empty topic is allowed and appears as `(uncategorized)`. UTF-8 deck
+content is preserved.
+
 ## Build
 
 Use Salam v0.4.7 or a compatible release, with its standard library available:

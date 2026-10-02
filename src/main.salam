@@ -7,6 +7,7 @@ include validator "validator.salam"
 include report "report.salam"
 include summary "summary.salam"
 include duplicates "duplicates.salam"
+include topics "topics.salam"
 
 func main:
     mut argv := os.Args()
@@ -37,6 +38,9 @@ func main:
     counts.duplicates = duplicates.Check(cards)
     counts.errors += counts.duplicates
     report.Print(counts, lines.len())
+    mut coverage := topics.Count(cards)
+    defer coverage.free()
+    report.TopicCoverage(coverage)
     if summary.Passed(counts): ret 0 end
     ret 1
 end

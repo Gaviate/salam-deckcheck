@@ -1,6 +1,7 @@
 // Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
 package report
 include summary "summary.salam"
+include topics "topics.salam"
 
 pub func Print(counts: summary.Counts, physical_lines: int):
     println "Cards: ", counts.rows
@@ -16,5 +17,13 @@ pub func Print(counts: summary.Counts, physical_lines: int):
         println "Result: PASS"
     else:
         println "Result: FAIL"
+    end
+end
+
+pub func TopicCoverage(rows: Vector<topics.Topic>):
+    println "Topics (unique complete cards): ", rows.len()
+    repeat rows.len() in i:
+        row := rows.get(i)
+        println "  ", row.name, ": ", row.cards
     end
 end

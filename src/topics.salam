@@ -1,0 +1,41 @@
+// Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
+package topics
+include card "card.salam"
+include duplicates "duplicates.salam"
+
+pub struct Topic:
+    pub name: str = ""
+    pub cards: int = 0
+end
+
+// Count only the first complete card for each normalized question.
+// Topic order follows first appearance so reports are deterministic.
+pub func Count(cards: Vector<card.Card>): Vector<Topic>:
+    mut result := Vector {} as Vector<Topic>
+    mut seen := HashMap {} as HashMap<str, bool>
+    defer seen.free()
+    mut positions := HashMap {} as HashMap<str, int>
+    defer positions.free()
+    repeat cards.len() in i:
+        item := cards.get(i)
+        if card.Complete(item):
+            question_key := duplicates.Key(item.question)
+            if not seen.has(question_key):
+                seen.put(question_key, true)
+                mut name := item.topic
+                if name.len() == 0: name = "(uncategorized)" end
+                topic_key := name.lower()
+                if positions.has(topic_key):
+                    index := positions.get(topic_key)
+                    mut row := result.get(index)
+                    row.cards += 1
+                    result.set(index, row)
+                else:
+                    positions.put(topic_key, result.len())
+                    result.push(Topic { name = name, cards = 1 })
+                end
+            end
+        end
+    end
+    ret result
+end

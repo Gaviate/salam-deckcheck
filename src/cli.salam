@@ -7,4 +7,7 @@ pub func Help():
     println "Each card has three tab-separated fields: question, answer, topic."
     println "Blank lines and lines beginning with # are ignored."
     println "DeckCheck reads your deck without changing it."
+    println "Blank questions/answers, malformed rows, and duplicate prompts fail."
+    println "Topic counts use unique complete cards; an empty topic is allowed."
+    println "Exit codes: 0 pass/help, 1 invalid deck, 2 usage/read error."
 end
