@@ -1,0 +1,37 @@
+name: Import original DeckCheck history
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  import-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the publication branch
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # official v5
+        with:
+          fetch-depth: 1
+      - name: Verify and publish the actual local commits to a new source branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s  %s\n' '65622646be55f9b3517f4ebfa8481cea2855178a2d29ac01b6916b8e415be79d' 'deckcheck-history.bundle' | sha256sum --check --strict
+          git bundle verify deckcheck-history.bundle
+          if git ls-remote --exit-code --heads origin refs/heads/source; then
+            echo 'The source branch already exists; refusing to replace it.'
+            exit 1
+          else
+            result=$?
+            test "$result" -eq 2 || exit "$result"
+          fi
+          git fetch ./deckcheck-history.bundle refs/heads/main:refs/heads/source
+          test "$(git rev-parse refs/heads/source)" = '363c9550a7161ceb785e881c2dc03d1c90fd7363'
+          test "$(git rev-list --count refs/heads/source)" = '10'
+          git log --reverse --format='%H %s' refs/heads/source
+          git push origin refs/heads/source:refs/heads/source
+
