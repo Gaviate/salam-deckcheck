@@ -1,6 +1,31 @@
 // Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
+import os
 include cli "cli.salam"
+include loader "loader.salam"
 
 func main:
-    cli.Help()
+    mut argv := os.Args()
+    defer argv.free()
+    if argv.len() == 1:
+        cli.Help()
+        ret 0
+    end
+    if argv.get(1) == "--help":
+        cli.Help()
+        ret 0
+    end
+    if argv.len() != 2:
+        println "error: provide exactly one TSV deck path"
+        ret 2
+    end
+    path := argv.get(1)
+    if not loader.Readable(path):
+        println "error: cannot read deck: ", path
+        ret 2
+    end
+    mut lines := loader.Lines(path)
+    defer lines.free()
+    println "Deck: ", path
+    println "Physical lines: ", lines.len()
+    ret 0
 end

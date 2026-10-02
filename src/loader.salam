@@ -1,0 +1,30 @@
+// Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
+package loader
+import os
+import io
+
+pub func Readable(path: str): bool:
+    if os.IsDir(path): ret false end
+    handle := os.Open(path, "rb")
+    if handle == null: ret false end
+    io.Close(handle)
+    ret true
+end
+
+pub func Lines(path: str): Vector<str>:
+    mut out := Vector {} as Vector<str>
+    text := io.ReadFile(path)
+    if text.len() == 0: ret out end
+    mut raw := text.split("\n")
+    defer raw.free()
+    repeat raw.len() in i:
+        line := raw.get(i)
+        if i == raw.len() - 1 and line.len() == 0: break end
+        if line.len() > 0 and line.substr(line.len() - 1, 1) == "\r":
+            out.push(line.substr(0, line.len() - 1))
+        else:
+            out.push(line)
+        end
+    end
+    ret out
+end
