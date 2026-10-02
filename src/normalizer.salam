@@ -3,10 +3,14 @@ package normalizer
 import str
 import unicode
 
+pub func Trim(text: str): str:
+    ret str.TrimLeft(str.TrimRight(text))
+end
+
 // Full Unicode case folding also handles expansions such as sharp s -> ss.
 // This deliberately does not merge different Unicode normalization forms.
 pub func Fold(text: str): str:
-    mut points := str.CodePoints(text.trim())
+    mut points := str.CodePoints(Trim(text))
     defer points.free()
     mut builder := str.NewBuilder()
     defer str.BufFree(builder)

@@ -12,7 +12,7 @@ pub func Load(path: str, opened &: bool): Vector<str>:
     mut text := io.ReadAll(handle)
     io.Close(handle)
     // Native strings stop at NUL. Reject a truncated/binary read instead of
-    // validating only the prefix. This also rejects a file changed mid-read.
+    // validating only the prefix. A size mismatch can also mean a concurrent edit.
     if (text.len() as i64) != os.FileSize(path): ret out end
     opened = true
     // The literal below is U+FEFF, encoded as the three UTF-8 BOM bytes.

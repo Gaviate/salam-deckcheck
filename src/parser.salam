@@ -1,9 +1,10 @@
 // Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
 package parser
 include card "card.salam"
+include normalizer "normalizer.salam"
 
 pub func Ignored(line: str): bool:
-    trimmed := line.trim()
+    trimmed := normalizer.Trim(line)
     // A whitespace-only TSV row still contains real (blank) card fields.
     if trimmed.len() == 0: ret line.find("\t") < 0 end
     ret trimmed.substr(0, 1) == "#"
@@ -18,9 +19,9 @@ pub func Parse(lines: Vector<str>): Vector<card.Card>:
             defer fields.free()
             mut item := card.Card { line = i + 1, columns = fields.len() }
             if fields.len() == 3:
-                item.question = fields.get(0).trim()
-                item.answer = fields.get(1).trim()
-                item.topic = fields.get(2).trim()
+                item.question = normalizer.Trim(fields.get(0))
+                item.answer = normalizer.Trim(fields.get(1))
+                item.topic = normalizer.Trim(fields.get(2))
             end
             cards.push(item)
         end
