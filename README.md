@@ -9,6 +9,10 @@ DeckCheck detects malformed rows and blank questions or answers, keeping the
 original physical line numbers in its diagnostics. Blank lines and `#` comments
 are ignored. A deck with no cards fails validation.
 
+Complete cards with repeated questions are errors. Questions are trimmed and
+lowercased for comparison; the diagnostic points back to the first occurrence.
+Answers and topics do not affect duplicate detection.
+
 ## Build
 
 Use Salam v0.4.7 or a compatible release, with its standard library available:

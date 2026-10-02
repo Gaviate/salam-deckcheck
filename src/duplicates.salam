@@ -1,0 +1,26 @@
+// Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
+package duplicates
+include card "card.salam"
+
+pub func Key(question: str): str:
+    ret question.trim().lower()
+end
+
+pub func Check(cards: Vector<card.Card>): int:
+    mut first_lines := HashMap {} as HashMap<str, int>
+    defer first_lines.free()
+    mut repeated := 0
+    repeat cards.len() in i:
+        item := cards.get(i)
+        if card.Complete(item):
+            key := Key(item.question)
+            if first_lines.has(key):
+                println "ERROR line ", item.line, ": duplicate question; first seen at line ", first_lines.get(key)
+                repeated += 1
+            else:
+                first_lines.put(key, item.line)
+            end
+        end
+    end
+    ret repeated
+end

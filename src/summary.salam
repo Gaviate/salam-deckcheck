@@ -7,6 +7,7 @@ pub struct Counts:
     pub malformed: int = 0
     pub blank_questions: int = 0
     pub blank_answers: int = 0
+    pub duplicates: int = 0
     pub errors: int = 0
 end
 

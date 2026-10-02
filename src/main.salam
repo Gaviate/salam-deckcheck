@@ -6,6 +6,7 @@ include parser "parser.salam"
 include validator "validator.salam"
 include report "report.salam"
 include summary "summary.salam"
+include duplicates "duplicates.salam"
 
 func main:
     mut argv := os.Args()
@@ -32,7 +33,9 @@ func main:
     println "Deck: ", path
     mut cards := parser.Parse(lines)
     defer cards.free()
-    counts := validator.Check(cards)
+    mut counts := validator.Check(cards)
+    counts.duplicates = duplicates.Check(cards)
+    counts.errors += counts.duplicates
     report.Print(counts, lines.len())
     if summary.Passed(counts): ret 0 end
     ret 1

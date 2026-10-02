@@ -6,9 +6,11 @@ pub func Print(counts: summary.Counts, physical_lines: int):
     println "Cards: ", counts.rows
     println "Ignored lines: ", physical_lines - counts.rows
     println "Complete cards: ", counts.valid
+    println "Unique complete cards: ", counts.valid - counts.duplicates
     println "Malformed rows: ", counts.malformed
     println "Blank questions: ", counts.blank_questions
     println "Blank answers: ", counts.blank_answers
+    println "Duplicate questions: ", counts.duplicates
     println "Errors: ", counts.errors
     if summary.Passed(counts):
         println "Result: PASS"
