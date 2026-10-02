@@ -55,12 +55,14 @@ case folding, trailing empty fields, empty decks, and embedded NUL rejection.
 It writes only to ignored `build/` files; it does not change input fixtures.
 
 ```powershell
-./tests/functional.ps1 -Compiler salam
+pwsh -File ./tests/functional.ps1 -Compiler salam
 ```
 
 If Salam is not on your PATH, pass its executable path as `-Compiler`. This
 project was tested with the official Windows v0.4.7 release. Its native build
-uses the release's bundled toolchain. The regression runner requires PowerShell.
+uses the release's bundled toolchain. The regression runner requires PowerShell
+7; it was tested with PowerShell 7.6.5. Windows PowerShell 5.1 does not reliably
+decode this UTF-8 script's Unicode literals.
 
 ## Source layout
 
