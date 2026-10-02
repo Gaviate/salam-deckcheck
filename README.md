@@ -18,6 +18,10 @@ without case distinctions, keeping the first spelling and first-appearance
 order. An empty topic is allowed and appears as `(uncategorized)`. UTF-8 deck
 content is preserved.
 
+Both LF and CRLF line endings and an optional UTF-8 BOM are supported. Empty
+fields and physical blank lines are preserved by the reader. Quoted fields,
+escaped tabs, headers, and multiline cards are outside this simple TSV format.
+
 ## Build
 
 Use Salam v0.4.7 or a compatible release, with its standard library available:

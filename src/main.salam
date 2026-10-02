@@ -16,21 +16,22 @@ func main:
         cli.Help()
         ret 0
     end
-    if argv.get(1) == "--help":
-        cli.Help()
-        ret 0
-    end
     if argv.len() != 2:
         println "error: provide exactly one TSV deck path"
         ret 2
     end
+    if argv.get(1) == "--help":
+        cli.Help()
+        ret 0
+    end
     path := argv.get(1)
-    if not loader.Readable(path):
+    mut opened := false
+    mut lines := loader.Load(path, opened)
+    defer lines.free()
+    if not opened:
         println "error: cannot read deck: ", path
         ret 2
     end
-    mut lines := loader.Lines(path)
-    defer lines.free()
     println "Deck: ", path
     mut cards := parser.Parse(lines)
     defer cards.free()

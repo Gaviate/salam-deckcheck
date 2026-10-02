@@ -3,17 +3,19 @@ package loader
 import os
 import io
 
-pub func Readable(path: str): bool:
-    if os.IsDir(path): ret false end
-    handle := os.Open(path, "rb")
-    if handle == null: ret false end
-    io.Close(handle)
-    ret true
-end
-
-pub func Lines(path: str): Vector<str>:
+pub func Load(path: str, opened &: bool): Vector<str>:
     mut out := Vector {} as Vector<str>
-    text := io.ReadFile(path)
+    opened = false
+    if os.IsDir(path): ret out end
+    handle := os.Open(path, "rb")
+    if handle == null: ret out end
+    mut text := io.ReadAll(handle)
+    io.Close(handle)
+    opened = true
+    // The literal below is U+FEFF, encoded as the three UTF-8 BOM bytes.
+    if text.len() >= 3 and text.substr(0, 3) == "﻿":
+        text = text.substr(3, text.len() - 3)
+    end
     if text.len() == 0: ret out end
     mut raw := text.split("\n")
     defer raw.free()
