@@ -2,10 +2,12 @@
 package topics
 include card "card.salam"
 include duplicates "duplicates.salam"
+include normalizer "normalizer.salam"
 
 pub struct Topic:
     pub name: str = ""
     pub cards: int = 0
+    pub unnamed: bool = false
 end
 
 // Count only the first complete card for each normalized question.
@@ -22,9 +24,12 @@ pub func Count(cards: Vector<card.Card>): Vector<Topic>:
             question_key := duplicates.Key(item.question)
             if not seen.has(question_key):
                 seen.put(question_key, true)
-                mut name := item.topic
-                if name.len() == 0: name = "(uncategorized)" end
-                topic_key := name.lower()
+                name := item.topic
+                unnamed := name.len() == 0
+                mut topic_key := "empty:"
+                if not unnamed:
+                    topic_key = "named:".concat(normalizer.Fold(name))
+                end
                 if positions.has(topic_key):
                     index := positions.get(topic_key)
                     mut row := result.get(index)
@@ -32,7 +37,7 @@ pub func Count(cards: Vector<card.Card>): Vector<Topic>:
                     result.set(index, row)
                 else:
                     positions.put(topic_key, result.len())
-                    result.push(Topic { name = name, cards = 1 })
+                    result.push(Topic { name = name, cards = 1, unnamed = unnamed })
                 end
             end
         end

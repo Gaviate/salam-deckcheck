@@ -24,6 +24,10 @@ pub func TopicCoverage(rows: Vector<topics.Topic>):
     println "Topics (unique complete cards): ", rows.len()
     repeat rows.len() in i:
         row := rows.get(i)
-        println "  ", row.name, ": ", row.cards
+        if row.unnamed:
+            println "  No topic: ", row.cards
+        else:
+            println "  Topic \"", row.name, "\": ", row.cards
+        end
     end
 end

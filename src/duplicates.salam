@@ -1,9 +1,10 @@
 // Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
 package duplicates
 include card "card.salam"
+include normalizer "normalizer.salam"
 
 pub func Key(question: str): str:
-    ret question.trim().lower()
+    ret normalizer.Fold(question)
 end
 
 pub func Check(cards: Vector<card.Card>): int:

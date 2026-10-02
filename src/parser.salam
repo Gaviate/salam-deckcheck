@@ -4,7 +4,8 @@ include card "card.salam"
 
 pub func Ignored(line: str): bool:
     trimmed := line.trim()
-    if trimmed.len() == 0: ret true end
+    // A whitespace-only TSV row still contains real (blank) card fields.
+    if trimmed.len() == 0: ret line.find("\t") < 0 end
     ret trimmed.substr(0, 1) == "#"
 end
 

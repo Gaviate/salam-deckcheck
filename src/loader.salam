@@ -11,6 +11,9 @@ pub func Load(path: str, opened &: bool): Vector<str>:
     if handle == null: ret out end
     mut text := io.ReadAll(handle)
     io.Close(handle)
+    // Native strings stop at NUL. Reject a truncated/binary read instead of
+    // validating only the prefix. This also rejects a file changed mid-read.
+    if (text.len() as i64) != os.FileSize(path): ret out end
     opened = true
     // The literal below is U+FEFF, encoded as the three UTF-8 BOM bytes.
     if text.len() >= 3 and text.substr(0, 3) == "﻿":

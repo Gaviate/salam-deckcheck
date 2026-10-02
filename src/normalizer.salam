@@ -1,0 +1,20 @@
+// Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
+package normalizer
+import str
+import unicode
+
+// Full Unicode case folding also handles expansions such as sharp s -> ss.
+// This deliberately does not merge different Unicode normalization forms.
+pub func Fold(text: str): str:
+    mut points := str.CodePoints(text.trim())
+    defer points.free()
+    mut builder := str.NewBuilder()
+    defer str.BufFree(builder)
+    repeat points.len() in i:
+        point := points.get(i)
+        repeat unicode.FullFoldLen(point) in k:
+            str.BufAppendCp(builder, unicode.FullFoldAt(point, k))
+        end
+    end
+    ret str.BufStr(builder)
+end
