@@ -7,7 +7,14 @@ pub func Ignored(line: str): bool:
     trimmed := normalizer.Trim(line)
     // A whitespace-only TSV row still contains real (blank) card fields.
     if trimmed.len() == 0: ret line.find("\t") < 0 end
-    ret trimmed.substr(0, 1) == "#"
+    // Only the question segment can introduce a comment. A hash in an answer
+    // or topic must not hide a row whose question is missing.
+    tab := line.find("\t")
+    mut first := line
+    if tab >= 0: first = line.substr(0, tab) end
+    question := normalizer.Trim(first)
+    if question.len() == 0: ret false end
+    ret question.substr(0, 1) == "#"
 end
 
 pub func Parse(lines: Vector<str>): Vector<card.Card>:

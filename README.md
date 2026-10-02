@@ -7,7 +7,9 @@ into a study app.
 The input format is one card per line: `question<TAB>answer<TAB>topic`.
 DeckCheck detects malformed rows and blank questions or answers, keeping the
 original physical line numbers in its diagnostics. Blank lines and `#` comments
-are ignored. A deck with no cards fails validation.
+are ignored. A comment starts with `#` in the question segment after leading
+whitespace; a hash in the answer or topic does not hide a row. Questions that
+start with `#` are reserved for comments. A deck with no cards fails validation.
 
 Complete cards with repeated questions are errors. Questions are trimmed and
 Unicode case-folded for comparison; the diagnostic points to the first occurrence.
@@ -48,7 +50,7 @@ incorrect usage or an unreadable path. All fixtures contain synthetic content.
 ## Functional checks
 
 The PowerShell runner builds the real native program and checks its output and
-exit codes against 29 cases, including BOM/CRLF, physical line numbers, Unicode
+exit codes against 31 cases, including BOM/CRLF, physical line numbers, Unicode
 case folding, trailing empty fields, empty decks, and embedded NUL rejection.
 It writes only to ignored `build/` files; it does not change input fixtures.
 

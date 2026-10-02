@@ -83,6 +83,8 @@ try {
     Assert-Deck 'empty-topic-is-distinct' "Q1`tA`t`nQ2`tA`t(uncategorized)" 0 @('Topics \(unique complete cards\):\s+2', 'No topic:\s+1', 'Topic "\s*\(uncategorized\)\s*":\s*1')
     Assert-Deck 'embedded-nul' "Q`tA`tT`0`nQ2`tA2`tT2`n" 2 @('cannot read deck')
     Assert-Deck 'unicode-whitespace-fields' " `t `tT" 1 @('(?m)^Blank questions:\s+1$', '(?m)^Blank answers:\s+1$', '(?m)^Errors:\s+2$')
+    Assert-Deck 'hash-in-answer' "`t#answer`tTopic`nQ`tA`tT" 1 @('line\s+1\s*: blank question', '(?m)^Cards:\s+2$', '(?m)^Ignored lines:\s+0$')
+    Assert-Deck 'hash-in-topic' "`t`t#topic`nQ`tA`tT" 1 @('line\s+1\s*: blank question', 'line\s+1\s*: blank answer', '(?m)^Cards:\s+2$', '(?m)^Ignored lines:\s+0$')
 
     Write-Output "All $deckcheckPassed functional cases passed against the native executable."
 }
