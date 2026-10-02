@@ -1,0 +1,10 @@
+// Copyright 2026 Jaye. SPDX-License-Identifier: GPL-3.0-only
+package cli
+
+pub func Help():
+    println "DeckCheck - offline flashcard deck checker"
+    println "Usage: deckcheck <deck.tsv>"
+    println "Each card has three tab-separated fields: question, answer, topic."
+    println "Blank lines and lines beginning with # are ignored."
+    println "DeckCheck reads your deck without changing it."
+end
